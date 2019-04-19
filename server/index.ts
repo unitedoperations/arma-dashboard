@@ -10,15 +10,43 @@ const nextHandler = app.getRequestHandler()
 
 const missionNameRegex: RegExp = /(CO|TVT|COTVT|LOL)(\d{1,3})_([_a-zA-Z0-9]+)_(?:v|V)([0-9\._]+)\.([a-zA-Z0-9_]+)\.pbo/g
 
+const islandExtensions: Record<string, string> = {
+  altis: 'Atlis',
+  stratis: 'Stratis',
+  mcn_aliabad: 'Aliabad Region',
+  chernarus: 'Chernarus',
+  chernarus_winter: 'Chernarus Winter',
+  chernarus_summer: 'Chernarus Summer',
+  desert_e: 'Desert',
+  fata: 'PR Fata',
+  fdf_isle1_a: 'Podagorsk',
+  provinggrounds_pmc: 'Proving Grounds',
+  shapur_baf: 'Shapur',
+  wl_rosche: 'Rosche',
+  takistan: 'Takistan',
+  utes: 'Utes',
+  zargabad: 'Zargabad',
+  porto: 'Porto',
+  vr: 'Virutal Reality',
+  vt5: 'Suomi Finland',
+  kunduz: 'Kunduz Afghanistan',
+  dya: 'Diyala Iraq',
+  tanoa: 'Tanoa',
+  kidal: 'Kidal',
+  sara: 'Sahrani',
+  ruha: 'Ruha',
+  prei_khmaoch_luong: 'Prei Khmaoch Luong'
+}
+
 app
   .prepare()
   .then(() => {
     server.post('/api/mission', (_req: express.Request, res: express.Response) => {
-      res.status(200).end()
+      res.status(200).send()
     })
 
     server.get('/api/mission/details', (req: express.Request, res: express.Response) => {
-      const { name } = req.query
+      const { name }: { name: string } = req.query
       const groups: RegExpExecArray = missionNameRegex.exec(decodeURIComponent(name))
       res.status(200).json({
         file: name,
@@ -26,7 +54,7 @@ app
         max: groups[2],
         name: groups[3].replace(/_/g, ' '),
         version: groups[4],
-        island: groups[5]
+        island: islandExtensions[groups[5].toLowerCase()]
       })
     })
 

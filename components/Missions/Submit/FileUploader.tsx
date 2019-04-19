@@ -9,7 +9,7 @@ interface FileUploaderProps {
 const FileUploader: React.FunctionComponent<FileUploaderProps> = (props): JSX.Element => {
   const handleChange = async (info: any) => {
     const { status } = info.file
-    if (status === 'done') {
+    if (status === 'done' && info.file.name) {
       notification.success({
         message: info.file.name,
         description: 'Mission file was successfully uploaded!'
